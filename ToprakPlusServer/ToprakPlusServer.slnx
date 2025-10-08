@@ -1,0 +1,6 @@
+﻿<Solution>
+  <Project Path="src\ToprakPlusServer.Application\ToprakPlusServer.Application.csproj" Type="Classic C#" />
+  <Project Path="src\ToprakPlusServer.Domain\ToprakPlusServer.Domain.csproj" Type="Classic C#" />
+  <Project Path="src\ToprakPlusServer.Infrastructure\ToprakPlusServer.Infrastructure.csproj" Type="Classic C#" />
+  <Project Path="src\ToprakPlusServer.WebAPI\ToprakPlusServer.WebAPI.csproj" Type="Classic C#" />
+</Solution>

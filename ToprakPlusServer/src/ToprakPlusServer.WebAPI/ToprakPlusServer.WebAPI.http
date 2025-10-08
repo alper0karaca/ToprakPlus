@@ -1,0 +1,6 @@
+@ToprakPlusServer.WebAPI_HostAddress = http://localhost:5171
+
+GET {{ToprakPlusServer.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

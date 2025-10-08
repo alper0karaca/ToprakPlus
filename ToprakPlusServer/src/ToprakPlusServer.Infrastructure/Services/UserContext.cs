@@ -1,0 +1,29 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
+using ToprakPlusServer.Application.Services;
+
+namespace ToprakPlusServer.Infrastructure.Services;
+
+internal class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContext
+{
+    public Guid GetUserId()
+    {
+        var http = httpContextAccessor.HttpContext;
+        var claims = http.User.Claims;
+        string? userId = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        if (userId is null)
+        {
+            throw new ArgumentNullException("Kullanıcı bilgisi bulunamadı");
+        }
+
+        try
+        {
+            Guid id = Guid.Parse(userId);
+            return id;
+        }
+        catch (Exception e)
+        {
+            throw new ArgumentException("Kullanıcı id uygun guid formatında değil");
+        }
+    }
+}
