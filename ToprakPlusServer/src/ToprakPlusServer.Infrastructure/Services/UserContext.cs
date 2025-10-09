@@ -8,8 +8,13 @@ internal class UserContext(IHttpContextAccessor httpContextAccessor) : IUserCont
 {
     public Guid GetUserId()
     {
-        var http = httpContextAccessor.HttpContext;
-        var claims = http.User.Claims;
+        var httpContext = httpContextAccessor.HttpContext;
+        if (httpContext is null)
+        {
+            throw new ArgumentNullException("context bilgisi bulunamadı");
+        }
+
+        var claims = httpContext.User.Claims;
         string? userId = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
         if (userId is null)
         {

@@ -9,7 +9,7 @@ namespace ToprakPlusServer.WebAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [EnableQuery]
-    public class oDataController : ControllerBase
+    public class ODataController : ControllerBase
     {
         public static IEdmModel GetEdmModel()
         {

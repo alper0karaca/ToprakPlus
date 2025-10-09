@@ -1,16 +1,20 @@
 using System.Security.Claims;
+using GenericRepository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ToprakPlusServer.Domain.Abstractions;
+using ToprakPlusServer.Domain.Users;
 
 namespace ToprakPlusServer.Infrastructure.Context;
 
-public sealed class ApplicationDbContext : DbContext
+public sealed class ApplicationDbContext : DbContext, IUnitOfWork
 {
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
     }
+    
+    public DbSet<User> Users { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -23,7 +27,7 @@ public sealed class ApplicationDbContext : DbContext
     {
         configurationBuilder.Properties<IdentityId>().HaveConversion<IdentityIdValueConverter>();
         configurationBuilder.Properties<decimal>().HaveColumnType("decimal(18,2)");
-        configurationBuilder.Properties<string>().HaveColumnType("varchar(MAX)");
+        configurationBuilder.Properties<string>().HaveColumnType("text");
         base.ConfigureConventions(configurationBuilder);
     }
 
@@ -32,7 +36,7 @@ public sealed class ApplicationDbContext : DbContext
         var entries = ChangeTracker.Entries<Entity>();
 
         HttpContextAccessor httpContextAccessor = new();
-        string userIdString =
+        string userIdString =  
             httpContextAccessor
                 .HttpContext!
                 .User
@@ -48,7 +52,7 @@ public sealed class ApplicationDbContext : DbContext
             if (entry.State == EntityState.Added)
             {
                 entry.Property(p => p.CreatedAt)
-                    .CurrentValue = DateTimeOffset.Now;
+                    .CurrentValue = DateTime.UtcNow;
                 entry.Property(p => p.CreatedBy)
                     .CurrentValue = identityId;
             }
@@ -58,14 +62,14 @@ public sealed class ApplicationDbContext : DbContext
                 if (entry.Property(p => p.IsDeleted).CurrentValue == true)
                 {
                     entry.Property(p => p.DeletedAt)
-                        .CurrentValue = DateTimeOffset.Now;
+                        .CurrentValue = DateTime.UtcNow;
                     entry.Property(p => p.DeletedBy)
                         .CurrentValue = identityId;
                 }
                 else
                 {
                     entry.Property(p => p.UpdatedAt)
-                        .CurrentValue = DateTimeOffset.Now;
+                        .CurrentValue = DateTime.UtcNow;
                     entry.Property(p => p.UpdatedBy)
                         .CurrentValue = identityId;
                 }
@@ -85,3 +89,4 @@ internal sealed class IdentityIdValueConverter : ValueConverter<IdentityId, Guid
 {
     public IdentityIdValueConverter() : base(m => m.Value, m => new IdentityId(m)) { }
 }
+
