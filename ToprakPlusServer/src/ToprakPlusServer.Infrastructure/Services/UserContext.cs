@@ -4,7 +4,7 @@ using ToprakPlusServer.Application.Services;
 
 namespace ToprakPlusServer.Infrastructure.Services;
 
-internal class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContext
+internal sealed class UserContext(IHttpContextAccessor httpContextAccessor) : IUserContext
 {
     public Guid GetUserId()
     {

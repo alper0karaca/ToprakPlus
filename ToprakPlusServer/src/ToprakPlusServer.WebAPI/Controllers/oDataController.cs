@@ -17,6 +17,6 @@ namespace ToprakPlusServer.WebAPI.Controllers
             builder.EnableLowerCamelCase();
             // builder.EntitySet<UserResponse>("users");
             return builder.GetEdmModel();
-        }
+        } 
     }
 }

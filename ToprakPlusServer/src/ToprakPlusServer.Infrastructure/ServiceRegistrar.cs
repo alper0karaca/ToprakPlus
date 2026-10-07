@@ -2,6 +2,7 @@ using GenericRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Scrutor;
 using ToprakPlusServer.Application.Services;
 using ToprakPlusServer.Domain.Users;
 using ToprakPlusServer.Infrastructure.Context;
@@ -32,6 +33,14 @@ public static class ServiceRegistrar
         services.AddScoped<IUserContext, UserContext>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IJwtProvider, JwtProvider>();
+
+        services.Scan(action => action
+            .FromAssemblies(typeof(ServiceRegistrar).Assembly)
+            .AddClasses(publicOnly: false)
+            .UsingRegistrationStrategy(RegistrationStrategy.Skip)
+            .AsImplementedInterfaces()
+            .WithScopedLifetime()
+        );
         
         return services;
     }

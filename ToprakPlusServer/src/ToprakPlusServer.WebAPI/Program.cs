@@ -29,7 +29,8 @@ builder.Services.AddRateLimiter(cfr =>
         opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
     });
 });
-builder.Services.AddControllers()
+builder.Services
+    .AddControllers()
     .AddOData(opt => 
         opt.Select()
             .Filter()

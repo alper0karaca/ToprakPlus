@@ -31,6 +31,13 @@ public abstract class Entity
 
 public sealed record IdentityId(Guid Value)
 {
-    public static implicit operator Guid(IdentityId id) => id.Value;
-    public static implicit operator string(IdentityId id) => id.Value.ToString();
+    public static implicit operator Guid(IdentityId id)
+    {
+        return id.Value;
+    }
+
+    public static implicit operator string(IdentityId id)
+    {
+        return id.Value.ToString();
+    }
 };
