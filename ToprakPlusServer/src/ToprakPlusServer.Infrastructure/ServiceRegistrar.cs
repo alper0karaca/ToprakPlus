@@ -29,10 +29,10 @@ public static class ServiceRegistrar
 
         services.AddScoped<IUnitOfWork>(srv => srv.GetRequiredService<ApplicationDbContext>());
         
-        // Burada DI'ları eklerken 'Scrutor' kütüphanesi kullanılabilir. 
-        services.AddScoped<IUserContext, UserContext>();
+        // Burada DI'ları eklerken 'Scrutor' kütüphanesi kullandım 
+        /*services.AddScoped<IUserContext, UserContext>();
         services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IJwtProvider, JwtProvider>();
+        services.AddScoped<IJwtProvider, JwtProvider>();*/
 
         services.Scan(action => action
             .FromAssemblies(typeof(ServiceRegistrar).Assembly)
