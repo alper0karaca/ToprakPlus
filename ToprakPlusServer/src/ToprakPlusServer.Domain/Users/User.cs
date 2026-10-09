@@ -11,7 +11,8 @@ public sealed class User : Entity
         Email = email;
         UserName = userName;
         Password = password;
-        FullName = new(FirstName.Value + " " +LastName.Value+" ("+Email.Value+")");
+        FullName = new(FirstName.Value + " " + LastName.Value + " (" + Email.Value + ")");
+        IsForgotPasswordCompleted = new(true); 
     }
 
     private User()
@@ -24,13 +25,28 @@ public sealed class User : Entity
     public Email Email { get; private set; } = default!;
     public UserName UserName { get; private set; } = default!;
     public Password Password { get; private set; } = default!;
-    
+    public ForgotPasswordCode? ForgotPasswordCode { get; private set; }
+    public ForgotPasswordDate? ForgotPasswordDate { get; private set; }
+    public IsForgotPasswordCompleted IsForgotPasswordCompleted { get; private set; } = default!;
+
     public bool VerifyPasswordHash(string password)
     {
         using var hmac = new System.Security.Cryptography.HMACSHA512(Password.PasswordSalt);
         var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
         return computedHash.SequenceEqual(Password.PasswordHash);
     }
-    
+
+    public void CreateForgotPasswordCode()
+    {
+        ForgotPasswordCode = new ForgotPasswordCode(Guid.CreateVersion7());
+        ForgotPasswordDate = new ForgotPasswordDate(DateTimeOffset.Now);
+        IsForgotPasswordCompleted = new(false);
+    }
+
+    public void SetPassword(Password password)
+    {
+        Password = password;
+    }
+
 }
 
